@@ -1,0 +1,33 @@
+<div class="p-6 max-w-4xl mx-auto">
+  <h2 class="text-2xl font-bold text-slate-800 mb-6">Suivi de mes candidatures</h2>
+
+  <div class="space-y-4">
+    @for (c of candidatures; track c.id_candidature) {
+      <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm transition">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="font-bold text-lg text-indigo-700">{{ c.projet?.titre }}</h3>
+            <p class="text-sm text-slate-500 mb-3 italic">{{ c.projet?.technologies }}</p>
+            <p class="text-sm text-slate-500 mb-3 italic">{{ c.projet?.description }}</p>
+          </div>
+          
+          @switch (c.statut_candidature) {
+            @case ('EN_ATTENTE') {
+              <span class="px-3 py-1 rounded-full text-xs font-bold border bg-amber-100 text-amber-700 border-amber-200">En attente</span>
+            }
+            @case ('ACCEPTE') {
+              <span class="px-3 py-1 rounded-full text-xs font-bold border bg-emerald-100 text-emerald-700 border-emerald-200">Accepté</span>
+            }
+            @case ('REFUSE') {
+              <span class="px-3 py-1 rounded-full text-xs font-bold border bg-red-100 text-red-700 border-red-200">Refusé</span>
+            }
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="text-center py-10 bg-slate-50 rounded-xl">
+        <p class="text-slate-500">Vous n'avez postulé à aucun projet pour le moment.</p>
+      </div>
+    }
+  </div>
+</div>

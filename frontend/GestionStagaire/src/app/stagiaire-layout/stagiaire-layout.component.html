@@ -1,0 +1,55 @@
+<div class="flex h-screen bg-gray-50">
+  <aside class="w-64 bg-indigo-900 text-white flex flex-col shadow-xl">
+    <div class="p-6 text-center text-xl font-bold border-b border-indigo-800">
+      Espace Stagiaire
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2">
+  <a routerLink="/stagiaire/dashboard" 
+     routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400 shadow-inner" 
+     class="block p-3 rounded hover:bg-indigo-700 transition">
+     Dashboard
+  </a>
+
+  <a routerLink="/stagiaire/profil" 
+     routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400 shadow-inner" 
+     class="block p-3 rounded hover:bg-indigo-700 transition">
+     Profile
+  </a>
+
+  <a routerLink="/stagiaire/cv-deploy" 
+     routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400 shadow-inner" 
+     class="block p-3 rounded hover:bg-indigo-700 transition">
+     Déploiement CV
+  </a>
+
+  <a routerLink="/stagiaire/projets" 
+     routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400 shadow-inner" 
+     class="block p-3 rounded hover:bg-indigo-700 transition">
+     Projets Disponibles
+  </a>
+
+  <a routerLink="/stagiaire/task" 
+     routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400 shadow-inner" 
+     class="block p-3 rounded hover:bg-indigo-700 transition">
+     Tasks
+  </a>
+
+  <a routerLink="/stagiaire/messages" 
+     routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400 shadow-inner" 
+     class="block p-3 rounded hover:bg-indigo-700 transition">
+     Messages
+  </a>
+</nav>
+
+    <div class="p-4 border-t border-indigo-800">
+      <button (click)="onLogout()" class="w-full text-left p-3 text-indigo-300 hover:bg-indigo-800 hover:text-white rounded transition">
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 overflow-y-auto p-8">
+    <router-outlet></router-outlet>
+  </main>
+</div>

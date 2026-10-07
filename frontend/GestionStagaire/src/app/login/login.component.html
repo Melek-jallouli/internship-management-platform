@@ -1,0 +1,30 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+    <h2 class="text-2xl font-bold text-slate-800 mb-6">Connexion</h2>
+    
+    @if (errorMessage) {
+      <div class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">{{ errorMessage }}</div>
+    }
+
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-slate-700">Email</label>
+      <input formControlName="email" type="email" class="w-full p-3 border rounded-lg mt-1 outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-slate-700">Mot de passe</label>
+      <input formControlName="password" type="password" class="w-full p-3 border rounded-lg mt-1 outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid" 
+      class="w-full bg-indigo-600 text-white p-3 rounded-lg font-bold hover:bg-indigo-700 transition disabled:opacity-50">
+      Se connecter
+    </button>
+
+    <div class="mt-4 text-center text-sm">
+      <p class="text-slate-600">Pas encore de compte ? 
+        <a routerLink="/register" class="text-indigo-600 font-bold hover:underline">S'inscrire</a>
+      </p>
+    </div>
+  </form>
+</div>

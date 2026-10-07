@@ -1,0 +1,189 @@
+<div class="max-w-2xl mx-auto px-4 py-8">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20 text-gray-400">
+    <svg class="animate-spin w-8 h-8 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>
+    <p class="text-sm">Calcul du classement en cours...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !isLoading" class="flex flex-col items-center justify-center py-20 text-red-400">
+    <p class="text-sm mb-3">{{ error }}</p>
+    <button (click)="fetchRankings()"
+      class="text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors">
+      Réessayer
+    </button>
+  </div>
+
+  <!-- Content -->
+  <ng-container *ngIf="!isLoading && !error">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-lg font-medium text-gray-900">Classement des stagiaires</h2>
+        <p class="text-sm text-gray-400 mt-0.5">{{ rankings.length }} stagiaires · trié par score final</p>
+      </div>
+      <button (click)="fetchRankings()"
+        class="flex items-center gap-1.5 text-sm px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-gray-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Actualiser
+      </button>
+    </div>
+
+    <!-- Podium top 3 -->
+    <div *ngIf="rankings.length >= 3"
+      class="flex items-end justify-center gap-4 bg-gray-50 rounded-2xl p-6 mb-6 border border-gray-100">
+
+      <!-- 2nd place -->
+      <div class="flex flex-col items-center gap-1 flex-1">
+        <div class="w-11 h-11 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xs font-medium">
+          S{{ rankings[1].stagiaire_id }}
+        </div>
+        <div class="w-5 h-5 rounded-full bg-gray-300 text-white flex items-center justify-center text-xs font-medium">2</div>
+        <p class="text-xs text-gray-500 text-center">#{{ rankings[1].stagiaire_id }}</p>
+        <p class="text-base font-medium text-gray-800">{{ rankings[1].final_score }}</p>
+        <span class="text-xs font-medium px-2 py-0.5 rounded-full"
+          [ngClass]="{
+            'bg-purple-50 text-purple-800': rankings[1].rank === 'S+',
+            'bg-amber-50 text-amber-800':   rankings[1].rank === 'S',
+            'bg-green-50 text-green-800':   rankings[1].rank === 'A',
+            'bg-blue-50 text-blue-800':     rankings[1].rank === 'B',
+            'bg-orange-50 text-orange-800': rankings[1].rank === 'C',
+            'bg-red-50 text-red-800':       rankings[1].rank === 'D'
+          }">{{ rankings[1].rank }}</span>
+      </div>
+
+      <!-- 1st place -->
+      <div class="flex flex-col items-center gap-1 flex-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-500 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+        </svg>
+        <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-medium">
+          S{{ rankings[0].stagiaire_id }}
+        </div>
+        <div class="w-5 h-5 rounded-full bg-amber-400 text-white flex items-center justify-center text-xs font-medium">1</div>
+        <p class="text-xs text-gray-500 text-center">#{{ rankings[0].stagiaire_id }}</p>
+        <p class="text-xl font-medium text-gray-900">{{ rankings[0].final_score }}</p>
+        <span class="text-xs font-medium px-2 py-0.5 rounded-full"
+          [ngClass]="{
+            'bg-purple-50 text-purple-800': rankings[0].rank === 'S+',
+            'bg-amber-50 text-amber-800':   rankings[0].rank === 'S',
+            'bg-green-50 text-green-800':   rankings[0].rank === 'A',
+            'bg-blue-50 text-blue-800':     rankings[0].rank === 'B',
+            'bg-orange-50 text-orange-800': rankings[0].rank === 'C',
+            'bg-red-50 text-red-800':       rankings[0].rank === 'D'
+          }">{{ rankings[0].rank }}</span>
+      </div>
+
+      <!-- 3rd place -->
+      <div class="flex flex-col items-center gap-1 flex-1">
+        <div class="w-11 h-11 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xs font-medium">
+          S{{ rankings[2].stagiaire_id }}
+        </div>
+        <div class="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-medium">3</div>
+        <p class="text-xs text-gray-500 text-center">#{{ rankings[2].stagiaire_id }}</p>
+        <p class="text-base font-medium text-gray-800">{{ rankings[2].final_score }}</p>
+        <span class="text-xs font-medium px-2 py-0.5 rounded-full"
+          [ngClass]="{
+            'bg-purple-50 text-purple-800': rankings[2].rank === 'S+',
+            'bg-amber-50 text-amber-800':   rankings[2].rank === 'S',
+            'bg-green-50 text-green-800':   rankings[2].rank === 'A',
+            'bg-blue-50 text-blue-800':     rankings[2].rank === 'B',
+            'bg-orange-50 text-orange-800': rankings[2].rank === 'C',
+            'bg-red-50 text-red-800':       rankings[2].rank === 'D'
+          }">{{ rankings[2].rank }}</span>
+      </div>
+    </div>
+
+    <!-- Full ranked list -->
+    <div class="flex flex-col gap-2">
+      <div *ngFor="let r of rankings; let i = index"
+        class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl border transition-colors"
+        [ngClass]="i === 0 ? 'border-amber-300' : 'border-gray-100 hover:border-gray-200'">
+
+        <!-- Position -->
+        <span class="text-sm font-medium w-5 text-center flex-shrink-0"
+          [ngClass]="i === 0 ? 'text-amber-500' : 'text-gray-300'">
+          {{ i + 1 }}
+        </span>
+
+        <!-- Avatar -->
+        <div class="w-9 h-9 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xs font-medium flex-shrink-0">
+          S{{ r.stagiaire_id }}
+        </div>
+
+        <!-- Name + mini bars -->
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-800 mb-1.5">Stagiaire #{{ r.stagiaire_id }}</p>
+          <div class="flex flex-col gap-1">
+            <!-- Tasks bar -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-300 w-16 flex-shrink-0">Tâches</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                <div class="h-1.5 rounded-full bg-teal-500 transition-all duration-500"
+                  [style.width]="getBarWidth(r.metrics.task_score, 40)"></div>
+              </div>
+              <span class="text-xs text-gray-400 w-8 text-right">{{ r.metrics.task_score }}</span>
+            </div>
+            <!-- Supervisor bar -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-300 w-16 flex-shrink-0">Encadrant</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                <div class="h-1.5 rounded-full bg-blue-400 transition-all duration-500"
+                  [style.width]="getBarWidth(r.metrics.supervisor_score, 40)"></div>
+              </div>
+              <span class="text-xs text-gray-400 w-8 text-right">{{ r.metrics.supervisor_score }}</span>
+            </div>
+            <!-- Timing bar -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-300 w-16 flex-shrink-0">Ponctualité</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                <div class="h-1.5 rounded-full bg-purple-400 transition-all duration-500"
+                  [style.width]="getBarWidth(r.metrics.timing_score, 20)"></div>
+              </div>
+              <span class="text-xs text-gray-400 w-8 text-right">{{ r.metrics.timing_score }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final score -->
+        <div class="text-right flex-shrink-0">
+          <p class="text-base font-medium text-gray-900">{{ r.final_score }}</p>
+          <p class="text-xs text-gray-300">/ 100</p>
+        </div>
+
+        <!-- Rank badge -->
+        <span class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0"
+          [ngClass]="{
+            'bg-purple-50 text-purple-800': r.rank === 'S+',
+            'bg-amber-50 text-amber-800':   r.rank === 'S',
+            'bg-green-50 text-green-800':   r.rank === 'A',
+            'bg-blue-50 text-blue-800':     r.rank === 'B',
+            'bg-orange-50 text-orange-800': r.rank === 'C',
+            'bg-red-50 text-red-800':       r.rank === 'D'
+          }">{{ r.rank }}</span>
+
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex items-center justify-center gap-5 mt-4 text-xs text-gray-400">
+      <span class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-teal-500 inline-block"></span> Tâches
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span> Encadrant
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-purple-400 inline-block"></span> Ponctualité
+      </span>
+    </div>
+
+  </ng-container>
+</div>

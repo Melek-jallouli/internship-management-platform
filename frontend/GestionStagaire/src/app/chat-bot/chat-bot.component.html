@@ -1,0 +1,60 @@
+<div class="flex flex-col h-[600px] w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+  
+  <div class="bg-indigo-600 p-4 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+      <span class="text-xl">🤖</span>
+    </div>
+    <div>
+      <h3 class="text-white font-bold leading-tight">Assistant Expert PFE</h3>
+      <p class="text-indigo-100 text-xs">Propulsé par Python AI</p>
+    </div>
+  </div>
+
+  <div #scrollContainer class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+    @for (msg of messages(); track msg.date) {
+      <div class="flex" [ngClass]="{'justify-end': !msg.isBot}">
+        <div [ngClass]="{
+          'bg-indigo-600 text-white rounded-br-none': !msg.isBot,
+          'bg-white text-slate-800 border border-slate-200 rounded-bl-none': msg.isBot
+        }" class="max-w-[80%] p-3 rounded-2xl shadow-sm text-sm">
+          {{ msg.text }}
+          <div class="text-[10px] mt-1 opacity-50 text-right">
+            {{ msg.date | date:'HH:mm' }}
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (isLoading()) {
+      <div class="flex justify-start">
+        <div class="bg-white border border-slate-200 p-3 rounded-2xl flex gap-1">
+          <span class="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce"></span>
+          <span class="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+          <span class="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="p-4 bg-white border-t border-slate-100">
+    <div class="flex gap-2">
+      <input 
+        type="text" 
+        [ngModel]="userQuestion()" 
+        (ngModelChange)="userQuestion.set($event)"
+        (keyup.enter)="sendMessage()"
+        placeholder="Posez une question sur les stagiaires..."
+        class="flex-1 bg-slate-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+      >
+      <button 
+        (click)="sendMessage()"
+        [disabled]="isLoading() || !userQuestion().trim()"
+        class="bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white p-3 rounded-xl transition-colors shadow-lg shadow-indigo-100"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

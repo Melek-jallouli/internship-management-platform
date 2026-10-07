@@ -1,0 +1,114 @@
+<div class="p-8 bg-slate-50 min-h-screen">
+  
+  <div class="flex justify-between items-center mb-10">
+    <div>
+      <h2 class="text-2xl font-black text-slate-800">Gestion des Missions</h2>
+      <p class="text-sm text-slate-500 font-medium">Suivez l'avancement des objectifs fixés aux stagiaires.</p>
+    </div>
+    <button (click)="showTaskModal.set(true)" 
+      class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-black text-sm transition shadow-lg shadow-indigo-100">
+      + NOUVELLE TÂCHE
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4">
+    @for (task of tasks(); track task.id_task) {
+      <div class="bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
+        <div class="flex items-center gap-6">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-slate-50 text-xl">
+            {{ task.statut === 'TERMINE' ? '✅' : '🕒' }}
+          </div>
+          
+          <div>
+            <div class="flex items-center gap-3 mb-1">
+              <h3 class="font-bold text-slate-800">{{ task.titre }}</h3>
+              <span [class]="'text-[9px] font-black px-2 py-1 rounded-md uppercase ' + getPriorityClass(task.priorite)">
+                {{ task.priorite }}
+              </span>
+            </div>
+            <p class="text-[10px] text-indigo-500 font-bold uppercase tracking-tight mb-1">
+               Ref PFE: #{{ task.id_pfe }}
+            </p>
+            <p class="text-xs text-slate-400 max-w-md truncate">{{ task.description }}</p>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Échéance</p>
+          <p class="text-sm font-bold text-slate-700">{{ task.date_limite | date:'dd MMM yyyy' }}</p>
+        </div>
+      </div>
+    } @empty {
+      <div class="text-center py-20 bg-slate-100/50 rounded-[40px] border-2 border-dashed border-slate-200">
+        <p class="text-slate-400 font-medium">Aucune tâche assignée pour le moment.</p>
+      </div>
+    }
+    <div *ngIf="aiAnalysis()" class="mb-6 p-4 rounded-lg border-l-4" 
+     [ngClass]="aiAnalysis().pourcentage_ia > 50 ? 'bg-green-50 border-green-500' : 'bg-amber-50 border-amber-500'">
+  <div class="flex justify-between items-center">
+    <div>
+      <h3 class="font-bold text-lg text-slate-800">Diagnostic de l'Assistant IA 🤖</h3>
+      <p class="text-slate-600">{{ aiAnalysis().analyse }}</p>
+    </div>
+    <div class="text-right">
+      <span class="text-3xl font-black text-slate-800">{{ aiAnalysis().pourcentage_ia }}%</span>
+      <p class="text-xs text-slate-500">Avancement pondéré</p>
+    </div>
+  </div>
+  
+  <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+    <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" 
+         [style.width.%]="aiAnalysis().pourcentage_ia"></div>
+  </div>
+</div>
+  </div>
+
+  @if (showTaskModal()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+      <div class="bg-white rounded-[32px] shadow-2xl w-full max-w-lg p-8 animate-in zoom-in duration-300">
+        <div class="flex justify-between items-center mb-8">
+          <h3 class="text-xl font-black text-slate-800">Créer une mission</h3>
+          <button (click)="showTaskModal.set(false)" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Assigner au stagiaire</label>
+            <select [(ngModel)]="newTask.id_pfe" 
+              class="w-full p-4 bg-slate-50 border-none rounded-2xl text-sm font-bold text-slate-700 focus:ring-2 focus:ring-indigo-500">
+              <option [ngValue]="null" disabled>Choisir un dossier PFE...</option>
+              @for (pfe of assignedPfes(); track pfe.id) {
+                <option [value]="pfe.id">
+                  {{ pfe.stagiaire?.utilisateur?.nom || 'Stagiaire #' + pfe.id }} - {{ pfe.projet?.titre }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <input [(ngModel)]="newTask.titre" placeholder="Titre de la tâche" 
+            class="w-full p-4 bg-slate-50 border-none rounded-2xl text-sm font-bold focus:ring-2 focus:ring-indigo-500">
+          
+          <div class="grid grid-cols-2 gap-4">
+            <input type="date" [(ngModel)]="newTask.date_limite" 
+              class="p-4 bg-slate-50 border-none rounded-2xl text-sm font-bold text-slate-500">
+            <select [(ngModel)]="newTask.priorite" 
+              class="p-4 bg-slate-50 border-none rounded-2xl text-sm font-bold text-slate-700">
+              <option value="HAUTE">Priorité Haute</option>
+              <option value="MOYENNE">Priorité Moyenne</option>
+              <option value="BASSE">Priorité Basse</option>
+            </select>
+          </div>
+
+          <textarea [(ngModel)]="newTask.description" placeholder="Description détaillée..." rows="4" 
+            class="w-full p-4 bg-slate-50 border-none rounded-2xl text-sm font-medium"></textarea>
+
+          <button (click)="addTask()" 
+            [disabled]="!newTask.id_pfe"
+            class="w-full py-4 bg-indigo-600 disabled:bg-slate-300 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95">
+            CONFIRMER L'ENVOI
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

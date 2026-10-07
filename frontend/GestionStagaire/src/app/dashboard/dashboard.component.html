@@ -1,0 +1,34 @@
+<div class="p-8 bg-gray-50 min-h-screen">
+  <h1 class="text-3xl font-bold text-indigo-900 mb-6">Bienvenue sur votre espace, Stagiaire</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-indigo-500">
+      <h2 class="text-xl font-semibold mb-2">État de mon PFE</h2>
+      <p class="text-gray-600">Statut : <span>{{ traduireStatut(status) }}</span></p>
+      <div class="mt-4">
+        <button (click)="goToCv()" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+          Mettre à jour mon CV
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500">
+      <h2 class="text-xl font-semibold mb-2">Projets Disponibles</h2>
+      <p class="text-gray-600">Vous avez {{ nbProjets }} projets en attente de choix.</p>
+      <a routerLink="/stagiaire/projets" class="text-indigo-600 underline mt-4 block">Voir les projets</a>
+    </div>
+  </div>
+
+  <div class="mt-8 bg-white p-6 rounded-xl shadow-md">
+    <h2 class="text-xl font-bold mb-4">Prochain entretien</h2>
+    @if (prochaineReunion) {
+      <p>Date : {{ prochaineReunion.dateDebut | date:'short' }}</p>
+      <button (click)="rejoindreAppel(prochaineReunion.roomName)" class="mt-3 px-6 py-2 bg-red-600 text-white rounded-full">
+        Rejoindre la réunion
+      </button>
+    } @else {
+      <p class="text-gray-500">Aucun entretien programmé pour le moment.</p>
+    }
+  </div>
+</div>

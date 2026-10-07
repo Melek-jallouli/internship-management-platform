@@ -1,0 +1,42 @@
+<div class="flex h-screen bg-gray-100">
+  <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl">
+    <div class="p-6 text-center text-xl font-bold border-b border-slate-800">
+      Panel Admin
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2">
+      <a routerLink="/admin/dashboard"
+       routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400" 
+       class="block p-3 rounded hover:bg-slate-700 transition">Tableau de bord</a>
+      <a routerLink="/admin/users" 
+      routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400" 
+      class="block p-3 rounded hover:bg-slate-700 transition">Gestion Utilisateurs</a>
+      <a routerLink="/admin/pfe-list" 
+      routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400"
+       class="block p-3 rounded hover:bg-slate-700 transition">Liste des PFE</a>
+      <a routerLink="/admin/add-project" 
+      routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400" 
+      class="block p-3 rounded hover:bg-slate-700 transition">Projet</a>
+      <a routerLink="/admin/cv-management" 
+      routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400" 
+      class="block p-3 rounded hover:bg-slate-700 transition">Gestion des CV</a>
+      <a routerLink="/admin/chatBot" 
+      routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400" 
+      class="block p-3 rounded hover:bg-slate-700 transition">chat Bot</a>
+      <a routerLink="/admin/ranking" 
+      routerLinkActive="bg-indigo-700 border-l-4 border-indigo-400" 
+      class="block p-3 rounded hover:bg-slate-700 transition">intern Ranking</a>
+    </nav>
+    
+
+    <div class="p-4 border-t border-slate-800">
+      <button (click)="onLogout()" class="w-full text-left p-3 text-red-400 hover:bg-red-900 hover:text-white rounded transition">
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 overflow-y-auto p-8">
+    <router-outlet></router-outlet>
+  </main>
+</div>

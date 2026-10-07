@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "tailwindcss";
+
+@layer theme {
+  :root {
+    /* Tu peux ajouter tes couleurs personnalisées ici */
+    --color-brand: #3b82f6;
+  }
+}

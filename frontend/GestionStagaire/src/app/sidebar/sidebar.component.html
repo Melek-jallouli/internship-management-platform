@@ -1,0 +1,25 @@
+<nav class="space-y-2 px-4">
+  <a routerLink="messages" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 rounded-lg">
+    <span>Messages</span>
+  </a>
+
+  @if (userRole === 'STAGIAIRE') {
+    <p class="text-xs text-slate-500 uppercase px-3 mt-4 mb-2">Mon Espace</p>
+    <a routerLink="cv-upload" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 rounded-lg">
+      <span>Déposer mon CV</span>
+    </a>
+  }
+
+  @if (userRole === 'ADMIN') {
+    <p class="text-xs text-slate-500 uppercase px-3 mt-4 mb-2">Administration</p>
+    <a routerLink="admin/users" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 rounded-lg">
+      <span>Gérer Utilisateurs</span>
+    </a>
+    <a routerLink="admin/cv-bank" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 rounded-lg">
+      <span>Voir les CV reçus</span>
+    </a>
+    <a routerLink="admin/projects" class="flex items-center p-3 text-slate-300 hover:bg-slate-800 rounded-lg">
+      <span>Liste des Projets PFE</span>
+    </a>
+  }
+</nav>

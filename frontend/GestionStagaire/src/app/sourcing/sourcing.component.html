@@ -1,0 +1,44 @@
+<div class="p-6 bg-white rounded-2xl shadow-sm border border-slate-200">
+  <h2 class="text-xl font-bold text-slate-800 mb-4">🎯 Sourcing CV Intelligent</h2>
+  
+  <div class="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors mb-6">
+    <input type="file" (change)="onFilesSelected($event)" multiple class="hidden" #fileInput>
+    <button (click)="fileInput.click()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold">
+      Sélectionner les CV (PDF)
+    </button>
+    <p class="text-slate-400 text-sm mt-2">Glissez vos fichiers ici ou cliquez pour parcourir</p>
+  </div>
+
+  @if (results().length > 0) {
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3 text-sm font-bold text-slate-600">Candidat</th>
+            <th class="px-4 py-3 text-sm font-bold text-slate-600">Score</th>
+            <th class="px-4 py-3 text-sm font-bold text-slate-600">Verdict</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (res of results(); track res.nom) {
+            <tr class="hover:bg-slate-50 transition">
+              <td class="px-4 py-3 text-sm font-medium">{{ res.nom }}</td>
+              <td class="px-4 py-3">
+                <div class="w-full bg-slate-100 rounded-full h-2 w-24">
+                  <div class="bg-indigo-500 h-2 rounded-full" [style.width.%]="res.score"></div>
+                </div>
+                <span class="text-xs font-bold text-slate-500">{{ res.score }}%</span>
+              </td>
+              <td class="px-4 py-3">
+                <span [class]="res.score >= 75 ? 'text-emerald-600 bg-emerald-50' : 'text-amber-600 bg-amber-50'" 
+                      class="px-3 py-1 rounded-full text-xs font-bold">
+                  {{ res.verdict }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

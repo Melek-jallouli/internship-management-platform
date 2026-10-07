@@ -1,0 +1,68 @@
+<div class="space-y-8">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-800">Vue d'ensemble</h1>
+    <p class="text-gray-500">Voici ce qui s'est passé sur la plateforme aujourd'hui.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
+      <div class="p-3 bg-blue-50 text-blue-600 rounded-lg">👥</div>
+      <div>
+        <p class="text-sm text-gray-500 font-medium">Stagiaires</p>
+        <p class="text-2xl font-bold">{{ stats.totalStagiaires }}</p>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
+      <div class="p-3 bg-emerald-50 text-emerald-600 rounded-lg">🎓</div>
+      <div>
+        <p class="text-sm text-gray-500 font-medium">Encadrants</p>
+        <p class="text-2xl font-bold">{{ stats.totalEncadrants }}</p>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
+      <div class="p-3 bg-amber-50 text-amber-600 rounded-lg">📝</div>
+      <div>
+        <p class="text-sm text-gray-500 font-medium">PFE à valider</p>
+        <p class="text-2xl font-bold">{{ stats.pfesEnAttente }}</p>
+      </div>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
+      <div class="p-3 bg-purple-50 text-purple-600 rounded-lg">🚀</div>
+      <div>
+        <p class="text-sm text-gray-500 font-medium">Projets totaux</p>
+        <p class="text-2xl font-bold">{{ stats.projetsActifs }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 border-b border-gray-50 flex justify-between items-center">
+      <h3 class="font-bold text-gray-800">Dernières inscriptions</h3>
+      <a routerLink="/admin/users" class="text-sm text-blue-600 hover:underline">Voir tout</a>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <tbody class="divide-y divide-gray-50">
+          <tr *ngFor="let user of recentUsers" class="hover:bg-gray-50 transition">
+            <td class="px-6 py-4 flex items-center space-x-3">
+              <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+                {{ user.nom[0] }}
+              </div>
+              <span class="font-medium text-gray-700">{{ user.nom }} {{ user.prenom }}</span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600 uppercase">{{ user.type_utilisateur }}</span>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-400 italic">Inscrit récemment</td>
+            <td class="px-6 py-4 text-right">
+              <button [routerLink]="['/admin/user', user.id]" class="text-gray-400 hover:text-blue-600">
+                👁️
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="p-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-2xl font-bold text-slate-800">Gestion des Utilisateurs</h1>
+    <button (click)="openAddModal()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 transition flex items-center gap-2">
+        <span>+ Ajouter Encadrant/Admin</span>
+    </button>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-slate-50 border-b border-slate-200">
+        <tr>
+          <th class="px-6 py-4 text-sm font-bold text-slate-600">Utilisateur</th>
+          <th class="px-6 py-4 text-sm font-bold text-slate-600">Rôle</th>
+          <th class="px-6 py-4 text-sm font-bold text-slate-600">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (u of users(); track u.id_utilisateur) {
+          <tr class="hover:bg-slate-50/50 transition">
+            <td class="px-6 py-4 text-sm font-medium text-slate-700">{{ u.prenom }} {{ u.nom }}</td>
+            <td class="px-6 py-4 text-sm">
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase"
+                [class.bg-blue-100]="u.type_utilisateur === 'STAGIAIRE'"
+                [class.text-blue-700]="u.type_utilisateur === 'STAGIAIRE'"
+                [class.bg-purple-100]="u.type_utilisateur.startsWith('ENCADRANT')"
+                [class.text-purple-700]="u.type_utilisateur.startsWith('ENCADRANT')"
+                [class.bg-red-100]="u.type_utilisateur === 'ADMIN'"
+                [class.text-red-700]="u.type_utilisateur === 'ADMIN'">
+                {{ u.type_utilisateur }}
+              </span>
+            </td>
+            <td class="px-6 py-4 flex gap-3">
+              <button 
+                (click)="editUser(u)"
+                class="text-indigo-600 hover:text-indigo-800 font-bold text-xs uppercase tracking-wider">
+                Modifier
+              </button>
+              <button 
+                (click)="deleteUser(u.id_utilisateur)"
+                class="text-red-500 hover:text-red-700 font-bold text-xs uppercase tracking-wider">
+                Supprimer
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3" class="px-6 py-10 text-center text-slate-400">Aucun utilisateur trouvé.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (selectedUser()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+      
+      <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <h3 class="text-lg font-bold text-slate-800">Modifier le profil</h3>
+        <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Prénom</label>
+          <input [ngModel]="selectedUser()?.prenom" (ngModelChange)="selectedUser()!.prenom = $event" type="text" 
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Nom</label>
+          <input [ngModel]="selectedUser()?.nom" (ngModelChange)="selectedUser()!.nom = $event" type="text" 
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Email</label>
+          <input [ngModel]="selectedUser()?.email" (ngModelChange)="selectedUser()!.email = $event" type="email" 
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Rôle</label>
+          <select [ngModel]="selectedUser()?.type_utilisateur" (ngModelChange)="selectedUser()!.type_utilisateur = $event" 
+                  class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none bg-white">
+            <option value="ADMIN">ADMIN</option>
+            <option value="ENCADRANT_PRO">ENCADRANT_PRO</option>
+            <option value="ENCADRANT_ACAD">ENCADRANT_ACAD</option>
+            <option value="STAGIAIRE">STAGIAIRE</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="p-6 bg-slate-50 flex gap-3">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 font-bold text-slate-600 hover:bg-white transition-all text-sm">
+          Annuler
+        </button>
+        <button (click)="updateUser()" class="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all text-sm">
+          Enregistrer
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

@@ -10,7 +10,7 @@ Frontend
 
 - Angular
 - TypeScript
-- SCSS
+- Tailwind CSS
 
 Backend
 
